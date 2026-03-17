@@ -1,0 +1,28 @@
+{
+  "name": "bentopdf-cli",
+  "version": "0.1.0",
+  "description": "Convert documents to PDF using WASM engines — no native dependencies",
+  "type": "module",
+  "bin": {
+    "bentopdf": "./bin/bentopdf.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "keywords": [
+    "pdf",
+    "convert",
+    "wasm",
+    "docx",
+    "pptx",
+    "cli"
+  ],
+  "license": "PolyForm-Shield-1.0.0",
+  "devDependencies": {
+    "vitest": "^4.1.0"
+  }
+}
