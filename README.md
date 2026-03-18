@@ -73,7 +73,7 @@ The format registry automatically picks the right engine based on file extension
 
 ## Feature Parity Roadmap
 
-BentoPDF provides 100+ tools across six categories. Here's what bentopdf-sh supports today and what's planned. Vote on or open [issues](https://github.com/lokkju/bentopdf-sh/issues) to help guide development priorities.
+BentoPDF provides 100+ tools across six categories (as of 2026-03-17). Here's what bentopdf-sh supports today and what's planned. Vote on or open [issues](https://github.com/lokkju/bentopdf-sh/issues) to help guide development priorities.
 
 ### Convert to PDF
 
