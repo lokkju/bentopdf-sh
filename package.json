@@ -22,7 +22,7 @@
     "cli"
   ],
   "license": "AGPL-3.0-or-later",
-  "files": ["bin/", "src/", "engines.json", "LICENSE.md"],
+  "files": ["bin/", "src/", "engines.json", "LICENSE.md", ".claude-plugin/", "skills/"],
   "devDependencies": {
     "vitest": "^4.1.0"
   },

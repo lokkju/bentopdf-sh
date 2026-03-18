@@ -1,0 +1,12 @@
+{
+  "name": "bentopdf",
+  "version": "0.1.0",
+  "description": "Convert documents to PDF from the command line using WASM engines. Powered by BentoPDF.",
+  "author": {
+    "name": "lokkju",
+    "url": "https://github.com/lokkju"
+  },
+  "repository": "https://github.com/lokkju/bentopdf-sh",
+  "license": "AGPL-3.0-or-later",
+  "keywords": ["pdf", "convert", "document", "wasm", "docx", "pptx"]
+}
