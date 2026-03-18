@@ -1,17 +1,17 @@
 ---
 name: to-pdf
 description: >
-  Convert documents to PDF. Use when the user asks to convert files to PDF,
-  mentions document conversion (e.g. "docx to pdf", "make a pdf", "convert
-  to pdf", "export as pdf"), or has document files that need to become PDFs.
-  Handles Word, PowerPoint, Excel, OpenDocument, Markdown, HTML, and images.
-argument-hint: "[file or glob pattern]"
-allowed-tools: "Bash(npx bentopdf-sh *), Bash(bentopdf *), Read, Glob"
+  Convert documents to PDF using bentopdf-sh. Use when the user asks to convert
+  files to PDF, generate a PDF, save or export as PDF, print to PDF, turn a file
+  into a PDF, or mentions "docx to pdf", "make a pdf", "create a pdf from",
+  "pdf from markdown", or asks to use bentopdf or bentopdf-sh.
+  Handles Word, PowerPoint, Excel, OpenDocument, RTF, Markdown, HTML, and images.
+allowed-tools: "Bash(npx bentopdf-sh *), Bash(bentopdf *), Bash(file *), Bash(ls *), Read, Glob"
 ---
 
 # Convert Documents to PDF
 
-You have `bentopdf-sh`, a CLI tool that converts documents to PDF using WASM engines locally. No network upload, no native dependencies beyond Node.js.
+The npm package is `bentopdf-sh`. The CLI command it installs is `bentopdf`.
 
 ## Check availability
 
@@ -19,8 +19,8 @@ You have `bentopdf-sh`, a CLI tool that converts documents to PDF using WASM eng
 !`which bentopdf 2>/dev/null && bentopdf --version 2>/dev/null || echo "NOT_INSTALLED"`
 ```
 
-If NOT_INSTALLED, install with: `npm install -g bentopdf-sh`
-Or use npx: `npx bentopdf-sh to-pdf <file>`
+If NOT_INSTALLED, use npx (no install needed): `npx bentopdf-sh to-pdf <file>`
+Or install globally: `npm install -g bentopdf-sh`
 
 ## Supported formats
 
@@ -46,17 +46,33 @@ Options:
 - `--engine <name>` — force engine: `mupdf`, `pandoc`, or `libreoffice`
 - `--verbose` — show conversion progress
 
+## Exit codes
+
+- **0** — success
+- **1** — conversion error
+- **2** — bad arguments (wrong flags, -o conflict with multiple inputs)
+- **3** — engine download failure
+
 ## When converting
 
-1. If the user provides a specific file, convert it directly
+1. If the user provides a specific file, verify it exists, then convert it directly
 2. If the user describes files vaguely ("convert all the word docs"), use Glob to find them first
 3. For multiple files, use batch mode with `-o ./output/` directory
 4. Always confirm the output path and that the PDF was created
 5. If conversion fails, retry with `--verbose` and report the error
+6. If exit code is 3 (download failure), suggest `bentopdf cache clear` then retry
+
+## Troubleshooting
+
+WASM engines are cached locally after first download. If engines fail to load:
+```bash
+bentopdf cache list    # show cached engines and sizes
+bentopdf cache clear   # remove all cached engines, re-download on next use
+```
 
 ## If $ARGUMENTS is provided
 
-Convert `$ARGUMENTS` to PDF now:
+Convert `$ARGUMENTS` to PDF now. First verify the file exists, then run:
 ```bash
 bentopdf to-pdf $ARGUMENTS
 ```
