@@ -24,5 +24,10 @@
   "license": "PolyForm-Shield-1.0.0",
   "devDependencies": {
     "vitest": "^4.1.0"
+  },
+  "dependencies": {
+    "@matbee/libreoffice-converter": "^2.6.0",
+    "mupdf": "^1.27.0",
+    "pandoc-wasm": "^1.0.1"
   }
 }
