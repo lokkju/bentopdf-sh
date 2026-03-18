@@ -1,27 +1,27 @@
 ---
 name: bentopdf
-description: Convert documents to PDF using bentopdf-cli. Use when the user asks to convert files to PDF, mentions "docx to pdf", "make a pdf", "pdf conversion", or asks about supported document conversion formats.
+description: Convert documents to PDF using bentopdf-sh. Use when the user asks to convert files to PDF, mentions "docx to pdf", "make a pdf", "pdf conversion", or asks about supported document conversion formats.
 ---
 
-# bentopdf-cli — Document to PDF Conversion
+# bentopdf-sh — Document to PDF Conversion
 
-You have access to `bentopdf-cli`, a local CLI tool that converts documents to PDF using WASM engines. No native dependencies required — just Node.js.
+You have access to `bentopdf-sh`, a local CLI tool that converts documents to PDF using WASM engines. No native dependencies required — just Node.js.
 
 ## Quick Reference
 
 ### Convert a file to PDF
 ```bash
-npx bentopdf-cli to-pdf <input>
+npx bentopdf-sh to-pdf <input>
 ```
 
 ### With explicit output path
 ```bash
-npx bentopdf-cli to-pdf report.docx -o final.pdf
+npx bentopdf-sh to-pdf report.docx -o final.pdf
 ```
 
 ### Batch convert
 ```bash
-npx bentopdf-cli to-pdf *.docx -o ./pdfs/
+npx bentopdf-sh to-pdf *.docx -o ./pdfs/
 ```
 
 ## Supported Input Formats
@@ -48,15 +48,15 @@ npx bentopdf-cli to-pdf *.docx -o ./pdfs/
 WASM engines are downloaded on first use and cached locally.
 
 ```bash
-npx bentopdf-cli cache list      # Show cached engines
-npx bentopdf-cli cache clear     # Remove all cached engines
+npx bentopdf-sh cache list      # Show cached engines
+npx bentopdf-sh cache clear     # Remove all cached engines
 ```
 
 ## Usage Guidelines
 
-1. **Check installation first**: Run `npx bentopdf-cli --version` to verify it's available
-2. **Single file**: `npx bentopdf-cli to-pdf document.docx` — outputs `document.pdf` in same directory
-3. **Batch to directory**: `npx bentopdf-cli to-pdf *.pptx -o ./pdfs/` — all PDFs go to `./pdfs/`
+1. **Check installation first**: Run `npx bentopdf-sh --version` to verify it's available
+2. **Single file**: `npx bentopdf-sh to-pdf document.docx` — outputs `document.pdf` in same directory
+3. **Batch to directory**: `npx bentopdf-sh to-pdf *.pptx -o ./pdfs/` — all PDFs go to `./pdfs/`
 4. **Multiple inputs with -o**: The `-o` must be a directory (ending in `/`) when converting multiple files
 5. **First run**: The first conversion for each format type will download the required WASM engine — this is a one-time operation
 

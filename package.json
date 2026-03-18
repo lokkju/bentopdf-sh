@@ -1,5 +1,5 @@
 {
-  "name": "bentopdf-cli",
+  "name": "bentopdf-sh",
   "version": "0.1.0",
   "description": "Convert documents to PDF using WASM engines — no native dependencies",
   "type": "module",
@@ -21,7 +21,7 @@
     "pptx",
     "cli"
   ],
-  "license": "PolyForm-Shield-1.0.0",
+  "license": "AGPL-3.0-or-later",
   "files": ["bin/", "src/", "engines.json", "LICENSE.md"],
   "devDependencies": {
     "vitest": "^4.1.0"
