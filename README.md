@@ -21,6 +21,22 @@ bentopdf to-pdf document.docx
 
 Requires Node.js 18+.
 
+### Claude Code / AI Agent Integration
+
+Add the `to-pdf` skill to your AI coding agent:
+
+```bash
+npx skills add lokkju/bentopdf-sh -a claude-code
+```
+
+Or install as a Claude Code plugin:
+
+```
+/plugin marketplace add lokkju/bentopdf-sh
+```
+
+This lets your agent convert documents to PDF directly when you ask it to.
+
 ## Usage
 
 ### Convert a file to PDF
