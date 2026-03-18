@@ -1,0 +1,20 @@
+{
+  "mupdf": {
+    "type": "npm",
+    "package": "mupdf",
+    "version": "1.27.0",
+    "note": "Installed as npm dependency — no separate download needed"
+  },
+  "pandoc": {
+    "type": "npm",
+    "package": "pandoc-wasm",
+    "version": "1.0.1",
+    "note": "Installed as npm dependency — no separate download needed"
+  },
+  "libreoffice": {
+    "type": "npm",
+    "package": "@matbee/libreoffice-converter",
+    "version": "2.5.1",
+    "note": "WASM files downloaded on first use by the package itself (~150MB)"
+  }
+}

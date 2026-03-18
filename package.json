@@ -22,6 +22,7 @@
     "cli"
   ],
   "license": "PolyForm-Shield-1.0.0",
+  "files": ["bin/", "src/", "engines.json", "LICENSE.md"],
   "devDependencies": {
     "vitest": "^4.1.0"
   },
