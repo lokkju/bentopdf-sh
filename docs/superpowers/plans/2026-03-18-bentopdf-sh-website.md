@@ -45,9 +45,10 @@
 git fetch origin
 git checkout --orphan website
 git rm -rf .
+git clean -fd
 ```
 
-This removes all CLI files. We're starting fresh.
+`git rm -rf .` clears the index; `git clean -fd` removes untracked files and directories (like `node_modules/`). We're starting fresh.
 
 - [ ] **Step 2: Create `package.json`**
 
@@ -760,7 +761,7 @@ git commit -m "feat: add features section with four cards"
       <div>
         <p class="format-group-label">Web &amp; Documents</p>
         <div class="format-badges">
-          <span class="badge">Markdown</span><span class="badge">HTML</span><span class="badge">HTM</span>
+          <span class="badge">PDF</span><span class="badge">Markdown</span><span class="badge">HTML</span><span class="badge">HTM</span>
         </div>
       </div>
       <div>
