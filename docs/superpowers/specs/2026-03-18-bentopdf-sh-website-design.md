@@ -133,7 +133,13 @@ No `index.mdx` at the `src/content/docs/` root — the docs root (`/docs/`) is h
 
 **Getting Started** — Prerequisites (Node.js 18+), install via npm/npx, first conversion example (`bentopdf report.docx`), link to CLI reference.
 
-**CLI Reference** — Full `bentopdf to-pdf` flag reference (`--output`, `--overwrite`, batch globs), `bentopdf cache` subcommands (list, clear), exit codes table (0 success / 1 conversion error / 2 bad args / 3 download failure).
+**CLI Reference** — Full flag reference for both invocation forms:
+- Global install (`npm install -g bentopdf-sh`): `bentopdf to-pdf …`
+- One-shot (`npx bentopdf-sh`): `npx bentopdf-sh to-pdf …`
+
+The binary name is `bentopdf` (set in `package.json` `bin`); the npm package name is `bentopdf-sh`. All examples in the docs use the short `bentopdf` form with a note at the top explaining the npx equivalent.
+
+Covers: `to-pdf` flag reference (`--output`, `--overwrite`, batch globs), `cache` subcommands (list, clear), exit codes table (0 success / 1 conversion error / 2 bad args / 3 download failure).
 
 **Supported Formats** — Full format table: input format, extension(s), engine used (mupdf / pandoc / libreoffice), notes/limitations.
 
@@ -174,7 +180,7 @@ bentopdf-sh/ (website branch)
 ## Social / Meta
 
 All pages include:
-- `og:type`, `og:url`, `og:title`, `og:description`, `og:image`
+- `og:type`, `og:url` (landing page only — static value, omitted from Starlight docs head to avoid wrong-URL bugs), `og:title` (`"bentopdf.sh — Documents to PDF. Locally."`), `og:description`, `og:image`
 - `twitter:card: summary_large_image`, `twitter:image`
 - `description`: "WASM-powered document-to-PDF conversion for the command line. No uploads, no cloud."
 - OG image: `https://bentopdf.sh/og.png` (placeholder; add real image before launch)
