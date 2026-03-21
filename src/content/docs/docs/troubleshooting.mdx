@@ -1,5 +1,87 @@
 ---
 title: Troubleshooting
+description: Common errors, cache management, and WASM memory limits.
 ---
 
-Coming soon.
+import { Aside } from '@astrojs/starlight/components';
+
+## Cache management
+
+WASM engine binaries are cached at:
+
+```
+~/.cache/bentopdf/engines/<engine-name>/<version>/
+```
+
+### List cached engines
+
+```bash
+bentopdf cache list
+```
+
+Output example:
+```
+libreoffice@2.6.0  83.2 MB  ~/.cache/bentopdf/engines/libreoffice/2.6.0/
+```
+
+### Clear the cache
+
+```bash
+bentopdf cache clear
+```
+
+This deletes all cached binaries. They will be re-downloaded on next use. Use this if an engine is corrupted or you want to free up disk space.
+
+---
+
+## Common errors
+
+### `Error: no engine registered for extension ".xyz"`
+
+The file extension is not in bentopdf's format registry. Either the format is unsupported, or the file has the wrong extension.
+
+**Fix:** Check [Supported Formats](/docs/supported-formats/). If the format is compatible with an existing engine, use `--engine` to force it:
+
+```bash
+bentopdf to-pdf notes.txt --engine pandoc
+```
+
+### `Error: engine download failed`
+
+The WASM binary could not be downloaded (network error, corporate proxy, or npm registry issue).
+
+**Fix:**
+1. Check your internet connection and proxy settings.
+2. Try running with `npm config set registry https://registry.npmjs.org` if behind a custom registry.
+3. Try `npx bentopdf-sh` instead of global install — npx handles resolution differently.
+
+Exit code: `3`
+
+### `Error: Cannot use a single filename output for multiple inputs`
+
+You passed `--output report.pdf` with multiple input files. A filename output only works with a single input.
+
+**Fix:** Pass a directory instead:
+
+```bash
+bentopdf to-pdf *.docx --output ./pdfs/
+```
+
+### LibreOffice WASM crashes / runs out of memory
+
+LibreOffice WASM requires significant memory (~500 MB) for large Office documents.
+
+**Fix:**
+- Increase Node.js memory limit: `NODE_OPTIONS=--max-old-space-size=2048 bentopdf to-pdf large.docx`
+- Convert large files one at a time rather than in batch.
+
+<Aside type="tip">
+If you regularly convert large Office files, `npm install -g bentopdf-sh` (global install) is faster than `npx` because it avoids re-resolving the package on each run.
+</Aside>
+
+---
+
+## Getting help
+
+- [GitHub Issues](https://github.com/lokkju/bentopdf-sh/issues) — bug reports and feature requests
+- [CLI Reference](/docs/cli-reference/) — full flag documentation
