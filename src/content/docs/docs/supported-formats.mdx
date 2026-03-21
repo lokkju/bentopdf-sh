@@ -1,5 +1,53 @@
 ---
 title: Supported Formats
+description: All input formats supported by bentopdf and which WASM engine handles each one.
 ---
 
-Coming soon.
+bentopdf selects the conversion engine automatically based on the input file extension. You can override this with `--engine`.
+
+## Format table
+
+| Extension | Format | Engine | Notes |
+|-----------|--------|--------|-------|
+| `.docx` | Word Document | LibreOffice WASM | |
+| `.doc` | Word 97–2003 | LibreOffice WASM | |
+| `.pptx` | PowerPoint | LibreOffice WASM | |
+| `.ppt` | PowerPoint 97–2003 | LibreOffice WASM | |
+| `.xlsx` | Excel | LibreOffice WASM | |
+| `.xls` | Excel 97–2003 | LibreOffice WASM | |
+| `.odt` | OpenDocument Text | LibreOffice WASM | |
+| `.ods` | OpenDocument Spreadsheet | LibreOffice WASM | |
+| `.odp` | OpenDocument Presentation | LibreOffice WASM | |
+| `.rtf` | Rich Text Format | LibreOffice WASM | |
+| `.md` / `.markdown` | Markdown | pandoc-wasm → MuPDF | Two-stage: pandoc renders HTML, MuPDF renders to PDF |
+| `.html` / `.htm` | HTML | pandoc-wasm → MuPDF | Two-stage pipeline |
+| `.png` | PNG Image | MuPDF | |
+| `.jpg` / `.jpeg` | JPEG Image | MuPDF | |
+| `.svg` | SVG | MuPDF | |
+| `.tiff` / `.tif` | TIFF Image | MuPDF | |
+| `.webp` | WebP Image | MuPDF | |
+
+## Engines
+
+### LibreOffice WASM
+Handles Office and OpenDocument formats via `@matbee/libreoffice-converter`. The WASM binary (~80 MB) is downloaded on first use and cached. Supports the full LibreOffice filter set.
+
+### MuPDF
+Handles images and acts as the PDF renderer in the pandoc pipeline via the `mupdf` npm package. Fast, lightweight, no network download required (ships as a native Node.js addon).
+
+### pandoc-wasm
+Converts Markdown and HTML to an intermediate HTML representation, then passes it to MuPDF for PDF rendering. Handles tables, code blocks, and most CommonMark extensions.
+
+## Unsupported formats
+
+If you pass a file with an unrecognised extension, bentopdf exits with code `1` and prints:
+
+```
+Error: no engine registered for extension ".xyz"
+```
+
+Use `--engine` to force an engine if you know the file format is compatible:
+
+```bash
+bentopdf to-pdf notes.txt --engine pandoc
+```
