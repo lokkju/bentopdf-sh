@@ -1,0 +1,480 @@
+---
+// Landing page — standalone Astro page, not a Starlight docs page
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="WASM-powered document-to-PDF conversion for the command line. No uploads, no cloud." />
+  <title>bentopdf.sh — Documents to PDF. Locally.</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://bentopdf.sh/" />
+  <meta property="og:title" content="bentopdf.sh — Documents to PDF. Locally." />
+  <meta property="og:description" content="WASM-powered document-to-PDF conversion for the command line. No uploads, no cloud." />
+  <meta property="og:image" content="https://bentopdf.sh/og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://bentopdf.sh/og.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #111827;
+      --bg-card:   #1f2937;
+      --bg-alt:    #161d2e;
+      --indigo:    #6366f1;
+      --indigo-hi: #818cf8;
+      --text:      #e5e7eb;
+      --text-dim:  #9ca3af;
+      --border:    #374151;
+      --sans:      'DM Sans', system-ui, sans-serif;
+      --mono:      'JetBrains Mono', 'Fira Code', monospace;
+    }
+
+    html {
+      scroll-snap-type: y mandatory;
+      overflow-y: scroll;
+      scroll-behavior: smooth;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+    }
+
+    body { min-height: 100vh; }
+
+    /* ── Header ── */
+    .site-header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; gap: 1rem;
+      padding: 0 2rem; height: 56px;
+      background: rgba(17, 24, 39, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .header-brand {
+      display: flex; align-items: center; gap: 0.5rem;
+      text-decoration: none; color: var(--indigo);
+      font-weight: 700; font-size: 1.05rem; letter-spacing: -0.02em;
+      flex-shrink: 0;
+    }
+    .header-brand svg { width: 20px; height: 20px; fill: var(--indigo); }
+    .header-nav { display: flex; align-items: center; gap: 0.25rem; }
+    .header-nav a {
+      color: var(--text-dim); text-decoration: none; font-size: 0.9rem;
+      padding: 0.25rem 0.6rem; border-radius: 4px;
+      transition: color 0.15s, background 0.15s;
+    }
+    .header-nav a:hover { color: var(--text); background: var(--bg-card); }
+    .header-nav a.active { color: var(--indigo); }
+    .header-spacer { flex: 1; }
+    .header-actions { display: flex; align-items: center; gap: 0.75rem; }
+    .header-actions a {
+      color: var(--text-dim); text-decoration: none;
+      display: flex; align-items: center; gap: 0.35rem;
+      font-size: 0.875rem; padding: 0.25rem 0.5rem; border-radius: 4px;
+      transition: color 0.15s;
+    }
+    .header-actions a:hover { color: var(--text); }
+    .header-actions svg { width: 18px; height: 18px; fill: currentColor; }
+
+    /* ── Snap sections ── */
+    .snap-section {
+      scroll-snap-align: start; min-height: 100vh;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      padding: 5rem 2rem 3rem; position: relative;
+    }
+
+    /* ── Shared typography ── */
+    .section-label {
+      font-family: var(--mono); font-size: 0.7rem;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--indigo); margin-bottom: 0.75rem;
+    }
+    .section-title {
+      font-size: clamp(1.6rem, 3.5vw, 2.5rem); font-weight: 700;
+      letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 1rem;
+    }
+    .section-subtitle {
+      font-size: 1rem; color: var(--text-dim);
+      max-width: 520px; line-height: 1.6;
+      margin-bottom: 3rem; text-align: center;
+    }
+
+    /* ── Buttons ── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.65rem 1.5rem; border-radius: 6px;
+      font-size: 0.95rem; font-weight: 600; text-decoration: none;
+      transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+      cursor: pointer; border: none; font-family: var(--sans);
+    }
+    .btn svg { width: 16px; height: 16px; fill: currentColor; flex-shrink: 0; }
+    .btn-primary {
+      background: var(--indigo); color: #fff;
+      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+    }
+    .btn-primary:hover {
+      background: #818cf8; transform: translateY(-1px);
+      box-shadow: 0 6px 28px rgba(99, 102, 241, 0.55);
+    }
+    .btn-secondary {
+      background: var(--bg-card); color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover {
+      background: var(--bg-alt); border-color: var(--indigo);
+      transform: translateY(-1px);
+    }
+    .cta-buttons {
+      display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(99, 102, 241, 0.18) 0%, transparent 70%),
+                  var(--bg);
+      text-align: center;
+    }
+    .hero-eyebrow {
+      display: inline-block; font-family: var(--mono); font-size: 0.75rem;
+      color: var(--indigo); background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 100px;
+      padding: 0.25rem 0.85rem; letter-spacing: 0.06em;
+      text-transform: uppercase; margin-bottom: 1.5rem;
+    }
+    .hero-title {
+      font-size: clamp(3rem, 8vw, 6rem); font-weight: 700;
+      letter-spacing: -0.04em; line-height: 1; margin-bottom: 1rem;
+      background: linear-gradient(135deg, #ffffff 30%, var(--indigo-hi) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.25rem); color: var(--text-dim);
+      margin-bottom: 2.5rem; max-width: 460px; line-height: 1.55;
+    }
+    .install-tabs { width: 100%; max-width: 480px; margin-bottom: 2.5rem; }
+    .tab-buttons { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 0; }
+    .tab-btn {
+      font-family: var(--mono); font-size: 0.85rem; color: var(--text-dim);
+      background: none; border: none; border-bottom: 2px solid transparent;
+      padding: 0.6rem 1.2rem; cursor: pointer;
+      transition: color 0.15s, border-color 0.15s; margin-bottom: -1px;
+    }
+    .tab-btn:hover { color: var(--text); }
+    .tab-btn.active { color: var(--indigo); border-bottom-color: var(--indigo); }
+    .tab-panels {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-top: none; border-radius: 0 0 8px 8px;
+    }
+    .tab-panel { display: none; padding: 1rem 1.25rem; }
+    .tab-panel.active { display: block; }
+    .tab-panel pre { font-family: var(--mono); font-size: 0.88rem; color: var(--text); white-space: pre; overflow-x: auto; text-align: left; }
+    .tab-panel .cmd-prefix { color: var(--text-dim); user-select: none; }
+
+    /* ── Features ── */
+    .features { background: var(--bg-alt); }
+    .features-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem; width: 100%; max-width: 900px;
+    }
+    .feature-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 2rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .feature-card:hover { border-color: var(--indigo); transform: translateY(-2px); }
+    .feature-icon {
+      width: 44px; height: 44px;
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      border-radius: 10px; display: flex; align-items: center;
+      justify-content: center; margin-bottom: 1.25rem;
+    }
+    .feature-icon svg { width: 22px; height: 22px; fill: var(--indigo-hi); }
+    .feature-title { font-size: 1.05rem; font-weight: 600; color: var(--text); margin-bottom: 0.6rem; letter-spacing: -0.01em; }
+    .feature-desc { font-size: 0.9rem; color: var(--text-dim); line-height: 1.65; }
+
+    /* ── Formats ── */
+    .formats { background: var(--bg); }
+    .format-groups {
+      display: flex; flex-direction: column; gap: 1.5rem;
+      width: 100%; max-width: 720px;
+    }
+    .format-group-label {
+      font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--text-dim); margin-bottom: 0.6rem;
+    }
+    .format-badges { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .badge {
+      font-family: var(--mono); font-size: 0.78rem; font-weight: 600;
+      color: var(--indigo-hi); background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      border-radius: 6px; padding: 0.3rem 0.65rem;
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+
+    /* ── Quick Start ── */
+    .quickstart { background: var(--bg-alt); }
+    .steps { display: flex; flex-direction: column; gap: 1rem; width: 100%; max-width: 640px; }
+    .step {
+      display: grid; grid-template-columns: 44px 1fr;
+      gap: 1.25rem; align-items: start;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.5rem;
+    }
+    .step-number {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--mono); font-size: 0.85rem; font-weight: 600;
+      color: var(--indigo); flex-shrink: 0;
+    }
+    .step-title { font-size: 0.95rem; font-weight: 600; color: var(--text); margin-bottom: 0.4rem; }
+    .step-desc { font-size: 0.875rem; color: var(--text-dim); line-height: 1.6; margin-bottom: 0.75rem; }
+    .step-code {
+      font-family: var(--mono); font-size: 0.82rem; color: var(--text);
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 6px; padding: 0.6rem 0.85rem;
+      overflow-x: auto; white-space: pre;
+    }
+    .step-code .cmd-prefix { color: var(--text-dim); user-select: none; }
+
+    /* ── Footer ── */
+    .site-footer {
+      background: var(--bg); border-top: 1px solid var(--border);
+      padding: 2.5rem 2rem; display: flex; flex-direction: column;
+      align-items: center; gap: 1.25rem; text-align: center;
+    }
+    .footer-brand {
+      display: flex; align-items: center; gap: 0.5rem;
+      color: var(--indigo); font-weight: 700; font-size: 1rem; letter-spacing: -0.02em;
+    }
+    .footer-brand svg { width: 18px; height: 18px; fill: var(--indigo); }
+    .footer-links { display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; }
+    .footer-links a {
+      color: var(--text-dim); text-decoration: none;
+      font-size: 0.875rem; transition: color 0.15s;
+    }
+    .footer-links a:hover { color: var(--text); }
+    .footer-copy { font-size: 0.8rem; color: var(--text-dim); }
+    .footer-copy a { color: var(--text-dim); text-decoration: underline; }
+    .footer-copy a:hover { color: var(--text); }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .site-header { padding: 0 1rem; }
+      .snap-section { padding: 5rem 1rem 2rem; }
+      .features-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <a href="/" class="header-brand">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm-1 7V3.5L18.5 9H13zm-5 8v-1h8v1H8zm0-3v-1h8v1H8zm0-3V9h5v1H8z"/>
+      </svg>
+      bentopdf.sh
+    </a>
+    <nav class="header-nav">
+      <a href="/" class="active">Home</a>
+      <a href="/docs/getting-started/">Docs</a>
+    </nav>
+    <div class="header-spacer"></div>
+    <div class="header-actions">
+      <a href="https://github.com/lokkju/bentopdf-sh" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" aria-label="GitHub">
+          <path d="M12 2C6.477 2 2 6.484 2 12.021c0 4.428 2.865 8.184 6.839 9.504.5.092.682-.217.682-.483 0-.237-.009-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.021C22 6.484 17.522 2 12 2z"/>
+        </svg>
+        GitHub
+      </a>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="snap-section hero">
+    <span class="hero-eyebrow">bentopdf.sh</span>
+    <h1 class="hero-title">Documents to PDF.<br>Locally.</h1>
+    <p class="hero-tagline">WASM-powered conversion — no uploads, no cloud, no dependencies.</p>
+
+    <div class="install-tabs">
+      <div class="tab-buttons">
+        <button class="tab-btn active" data-tab="npx">npx</button>
+        <button class="tab-btn" data-tab="npm">npm</button>
+      </div>
+      <div class="tab-panels">
+        <div class="tab-panel active" id="tab-npx">
+          <pre><span class="cmd-prefix">$ </span>npx bentopdf-sh to-pdf report.docx</pre>
+        </div>
+        <div class="tab-panel" id="tab-npm">
+          <pre><span class="cmd-prefix">$ </span>npm install -g bentopdf-sh
+<span class="cmd-prefix">$ </span>bentopdf to-pdf report.docx</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="cta-buttons">
+      <a href="/docs/getting-started/" class="btn btn-primary">
+        <svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+        Get Started
+      </a>
+      <a href="https://github.com/lokkju/bentopdf-sh" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.021c0 4.428 2.865 8.184 6.839 9.504.5.092.682-.217.682-.483 0-.237-.009-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.021C22 6.484 17.522 2 12 2z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="snap-section features">
+    <p class="section-label">Features</p>
+    <h2 class="section-title">Everything you need, nothing you don't.</h2>
+    <p class="section-subtitle">The same WASM engines that power BentoPDF in the browser, now driven from your terminal.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+        </div>
+        <h3 class="feature-title">Private by default</h3>
+        <p class="feature-desc">Runs entirely in-process using WASM. Nothing leaves your machine — no uploads, no cloud calls, no telemetry.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>
+        </div>
+        <h3 class="feature-title">WASM-powered</h3>
+        <p class="feature-desc">Same engines as BentoPDF: LibreOffice WASM, MuPDF, and pandoc-wasm — battle-tested in production, now on the CLI.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M20 6h-2.18c.07-.44.18-.87.18-1.33C18 2.54 15.96.5 13.5.5c-1.3 0-2.43.52-3.27 1.36L9 3.08 7.77 1.86C6.93.52 5.8 0 4.5 0 2.04 0 0 2.04 0 4.5c0 .46.11.89.18 1.33H0v2h20c1.1 0 2 .9 2 2v8c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2v-5H0v5c0 2.21 1.79 4 4 4h16c2.21 0 4-1.79 4-4V10c0-2.21-1.79-4-4-4z"/></svg>
+        </div>
+        <h3 class="feature-title">15+ formats</h3>
+        <p class="feature-desc">DOCX, PPTX, XLSX, ODT, RTF, Markdown, HTML, PNG, JPEG, SVG, TIFF, WebP — single command, automatic engine selection.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
+        </div>
+        <h3 class="feature-title">AI-native</h3>
+        <p class="feature-desc">First-class Claude Code skill. One command to install — then just ask Claude to convert your files.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Supported Formats -->
+  <section class="snap-section formats">
+    <p class="section-label">Formats</p>
+    <h2 class="section-title">One command, any format.</h2>
+    <p class="section-subtitle">bentopdf automatically picks the right WASM engine based on your input file extension.</p>
+    <div class="format-groups">
+      <div>
+        <p class="format-group-label">Office Documents</p>
+        <div class="format-badges">
+          <span class="badge">DOCX</span><span class="badge">DOC</span>
+          <span class="badge">PPTX</span><span class="badge">PPT</span>
+          <span class="badge">XLSX</span><span class="badge">XLS</span>
+          <span class="badge">ODT</span><span class="badge">ODS</span>
+          <span class="badge">ODP</span><span class="badge">RTF</span>
+        </div>
+      </div>
+      <div>
+        <p class="format-group-label">Web &amp; Documents</p>
+        <div class="format-badges">
+          <span class="badge">PDF</span><span class="badge">Markdown</span><span class="badge">HTML</span><span class="badge">HTM</span>
+        </div>
+      </div>
+      <div>
+        <p class="format-group-label">Images</p>
+        <div class="format-badges">
+          <span class="badge">PNG</span><span class="badge">JPEG</span><span class="badge">SVG</span>
+          <span class="badge">TIFF</span><span class="badge">WebP</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Start -->
+  <section class="snap-section quickstart">
+    <p class="section-label">Quick Start</p>
+    <h2 class="section-title">Up in three steps.</h2>
+    <p class="section-subtitle">No daemon, no config file required — just install and convert.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-number">1</div>
+        <div>
+          <p class="step-title">Install</p>
+          <p class="step-desc">Install globally via npm. Requires Node.js 18+. WASM engines are downloaded on first use and cached in <code>~/.cache/bentopdf/</code>.</p>
+          <pre class="step-code"><span class="cmd-prefix">$ </span>npm install -g bentopdf-sh</pre>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <div>
+          <p class="step-title">Convert</p>
+          <p class="step-desc">Pass one or more files. bentopdf picks the right engine automatically. Output defaults to the same directory as input.</p>
+          <pre class="step-code"><span class="cmd-prefix">$ </span>bentopdf to-pdf report.docx slides.pptx</pre>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <div>
+          <p class="step-title">Add to Claude Code</p>
+          <p class="step-desc">Install the Claude Code skill. Then just ask Claude to convert your files — it uses bentopdf under the hood.</p>
+          <pre class="step-code"><span class="cmd-prefix">$ </span>npx skills add lokkju/bentopdf-sh -a claude-code</pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-brand">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm-1 7V3.5L18.5 9H13zm-5 8v-1h8v1H8zm0-3v-1h8v1H8zm0-3V9h5v1H8z"/>
+      </svg>
+      bentopdf.sh
+    </div>
+    <nav class="footer-links">
+      <a href="/docs/getting-started/">Getting Started</a>
+      <a href="/docs/cli-reference/">CLI Reference</a>
+      <a href="/docs/supported-formats/">Supported Formats</a>
+      <a href="/docs/claude-code/">Claude Code</a>
+      <a href="/docs/troubleshooting/">Troubleshooting</a>
+      <a href="https://github.com/lokkju/bentopdf-sh" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="https://www.npmjs.com/package/bentopdf-sh" target="_blank" rel="noopener noreferrer">npm</a>
+    </nav>
+    <p class="footer-copy">
+      Powered by <a href="https://bentopdf.com" target="_blank" rel="noopener noreferrer">BentoPDF</a>
+      &nbsp;&middot;&nbsp;
+      <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener noreferrer">AGPL-3.0</a>
+      &nbsp;&middot;&nbsp;
+      Built with <svg viewBox="0 0 16 16" style="display:inline;width:14px;height:14px;fill:#e03e6a;vertical-align:-2px;" aria-label="love"><path d="M4.25 2.5c-1.336 0-2.75 1.164-2.75 3 0 2.15 1.58 4.144 3.365 5.682A20.6 20.6 0 0 0 8 13.393a20.6 20.6 0 0 0 3.135-2.211C12.92 9.644 14.5 7.65 14.5 5.5c0-1.836-1.414-3-2.75-3-1.373 0-2.609.986-3.029 2.456a.75.75 0 0 1-1.442 0C6.859 3.486 5.623 2.5 4.25 2.5Z"/></svg>
+      by <a href="https://github.com/lokkju" target="_blank" rel="noopener noreferrer">lokkju</a>
+    </p>
+  </footer>
+
+  <script>
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = btn.dataset.tab;
+        tabBtns.forEach(b => b.classList.remove('active'));
+        tabPanels.forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        const panel = document.getElementById('tab-' + target);
+        if (panel) panel.classList.add('active');
+      });
+    });
+  </script>
+
+</body>
+</html>
