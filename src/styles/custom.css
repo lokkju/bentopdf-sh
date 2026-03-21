@@ -1,1 +1,28 @@
-/* placeholder — filled in Task 2 */
+/* bentopdf.sh — Starlight accent + font overrides */
+
+:root {
+  --sl-color-accent-low:  #1e1b4b;
+  --sl-color-accent:      #6366f1;
+  --sl-color-accent-high: #818cf8;
+  --sl-color-text-accent: #818cf8;
+  --sl-font:              'DM Sans', system-ui, sans-serif;
+  --sl-font-mono:         'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+}
+
+/* Sidebar active item */
+.sl-sidebar a[aria-current='page'] {
+  color: var(--sl-color-accent);
+  border-inline-start-color: var(--sl-color-accent);
+}
+
+/* Code blocks */
+code, pre, kbd {
+  font-family: var(--sl-font-mono);
+}
+
+/* Nav brand */
+.site-title {
+  color: var(--sl-color-accent) !important;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
