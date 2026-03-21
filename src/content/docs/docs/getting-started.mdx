@@ -1,5 +1,69 @@
 ---
 title: Getting Started
+description: Install bentopdf-sh and convert your first document to PDF.
 ---
 
-Coming soon.
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+## Prerequisites
+
+- **Node.js 18+** — check with `node --version`
+- npm 9+ (comes with Node.js)
+
+WASM engines are downloaded on first use and cached at `~/.cache/bentopdf/`. An internet connection is required the first time each engine is used; after that it works fully offline.
+
+## Installation
+
+<Tabs>
+  <TabItem label="npm (global)">
+    ```bash
+    npm install -g bentopdf-sh
+    ```
+    This makes the `bentopdf` command available globally.
+  </TabItem>
+  <TabItem label="npx (one-shot)">
+    ```bash
+    npx bentopdf-sh to-pdf report.docx
+    ```
+    No installation required. Slower on first run while npm fetches the package.
+  </TabItem>
+</Tabs>
+
+## Your first conversion
+
+Convert a Word document to PDF:
+
+```bash
+bentopdf to-pdf report.docx
+```
+
+Output: `report.pdf` in the same directory as the input.
+
+Convert multiple files at once:
+
+```bash
+bentopdf to-pdf slides.pptx notes.md screenshot.png
+```
+
+Each file is converted independently. Failures are reported at the end; successful conversions are not affected by other files failing.
+
+## Specify an output location
+
+Write to a specific file:
+
+```bash
+bentopdf to-pdf report.docx --output ~/Desktop/report.pdf
+```
+
+Write to a directory (multiple inputs):
+
+```bash
+bentopdf to-pdf *.docx --output ./pdfs/
+```
+
+## Next steps
+
+- [CLI Reference](/docs/cli-reference/) — all flags and subcommands
+- [Supported Formats](/docs/supported-formats/) — which engine handles which format
+- [Claude Code](/docs/claude-code/) — use bentopdf from within Claude
+- [Troubleshooting](/docs/troubleshooting/) — cache management and common errors
