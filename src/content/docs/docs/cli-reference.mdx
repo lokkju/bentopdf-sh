@@ -1,5 +1,104 @@
 ---
 title: CLI Reference
+description: Complete reference for all bentopdf commands, flags, and exit codes.
 ---
 
-Coming soon.
+## Invocation
+
+If installed globally (`npm install -g bentopdf-sh`):
+
+```bash
+bentopdf <command> [options]
+```
+
+If using npx:
+
+```bash
+npx bentopdf-sh <command> [options]
+```
+
+All examples below use the short `bentopdf` form.
+
+---
+
+## `bentopdf to-pdf`
+
+Convert one or more files to PDF.
+
+```bash
+bentopdf to-pdf <input...> [options]
+```
+
+### Arguments
+
+| Argument | Description |
+|----------|-------------|
+| `<input...>` | One or more input file paths. Glob patterns are expanded by your shell. |
+
+### Options
+
+| Flag | Alias | Type | Default | Description |
+|------|-------|------|---------|-------------|
+| `--output` | `-o` | string | — | Output file path (single input) or directory path (multiple inputs). Defaults to same directory as input, same filename with `.pdf` extension. |
+| `--engine` | — | string | auto | Force a specific engine: `mupdf`, `pandoc`, or `libreoffice`. By default bentopdf selects the engine based on file extension. |
+| `--verbose` | — | boolean | `false` | Show detailed progress output including engine load time and conversion duration. |
+| `--overwrite` | — | boolean | `false` | Overwrite existing output files without prompting. |
+
+### Examples
+
+```bash
+# Single file, default output location
+bentopdf to-pdf report.docx
+
+# Single file, explicit output path
+bentopdf to-pdf report.docx -o ~/Desktop/report.pdf
+
+# Multiple files to a directory
+bentopdf to-pdf *.pptx -o ./pdfs/
+
+# Force LibreOffice engine
+bentopdf to-pdf notes.html --engine libreoffice
+
+# Verbose output
+bentopdf to-pdf large-doc.docx --verbose
+```
+
+---
+
+## `bentopdf cache`
+
+Manage the WASM engine cache.
+
+```bash
+bentopdf cache <action>
+```
+
+### Actions
+
+| Action | Description |
+|--------|-------------|
+| `list` | List all cached engines with their version, size, and cache path. |
+| `clear` | Delete all cached engines. They will be re-downloaded on next use. |
+
+### Examples
+
+```bash
+# See what's cached
+bentopdf cache list
+
+# Free up disk space
+bentopdf cache clear
+```
+
+Cache location: `~/.cache/bentopdf/engines/<name>/<version>/`
+
+---
+
+## Exit codes
+
+| Code | Meaning |
+|------|---------|
+| `0` | All conversions succeeded. |
+| `1` | One or more conversions failed (file not found, unsupported format, engine error). |
+| `2` | Bad arguments (missing required input, conflicting flags). |
+| `3` | Engine download failed (network error while fetching WASM binary). |
