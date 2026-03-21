@@ -1,5 +1,69 @@
 ---
 title: Claude Code
+description: Install the bentopdf Claude Code skill and use it from within Claude.
 ---
 
-Coming soon.
+import { Aside } from '@astrojs/starlight/components';
+
+bentopdf ships a first-class Claude Code skill. Once installed, you can ask Claude to convert files to PDF and it will use `bentopdf` under the hood.
+
+## Install the skill
+
+The fastest way is via the `skills` CLI:
+
+```bash
+npx skills add lokkju/bentopdf-sh -a claude-code
+```
+
+This clones the skill from the `skills/to-pdf/` directory in this repository into your Claude Code skills directory (`~/.claude/skills/to-pdf/`).
+
+<Aside type="note">
+The `skills` CLI is part of the [Vercel open agent skills](https://github.com/vercel/agent-skills) ecosystem. The `-a claude-code` flag installs it specifically for Claude Code.
+</Aside>
+
+## Manual install (plugin)
+
+Alternatively, install the full Claude Code plugin, which includes the skill plus plugin metadata:
+
+```bash
+# Copy the plugin directory into your Claude plugins folder
+cp -r .claude-plugin ~/.claude/plugins/bentopdf
+```
+
+Or add it to your project's `.claude/` directory for project-scoped access.
+
+## What the skill does
+
+When active, Claude will recognise requests like:
+
+- "Convert report.docx to PDF"
+- "Turn these slides into a PDF"
+- "Make a PDF from all the markdown files in this directory"
+
+Claude translates those into `bentopdf to-pdf` commands and runs them in your terminal.
+
+## Example prompts
+
+```
+Convert the file at ~/Downloads/quarterly-report.docx to PDF and put it on my Desktop.
+```
+
+```
+Convert all the .md files in ./docs to PDF, output them to ./pdfs/.
+```
+
+```
+I have a bunch of screenshots in ./screenshots — merge them into a single PDF.
+```
+
+## Trigger phrases
+
+The skill activates on any of:
+- "convert * to pdf" / "make * a pdf"
+- "export * as pdf"
+- "pdf from *"
+- Anything involving `bentopdf` directly
+
+## Availability check
+
+The skill checks that `bentopdf` is available before running. If not found, it suggests installing via `npm install -g bentopdf-sh`.
