@@ -36,7 +36,7 @@
     }
 
     html {
-      scroll-snap-type: y mandatory;
+      scroll-snap-type: y proximity;
       overflow-y: scroll;
       scroll-behavior: smooth;
       background: var(--bg);
@@ -177,6 +177,19 @@
     .tab-panel pre { font-family: var(--mono); font-size: 0.88rem; color: var(--text); white-space: pre; overflow-x: auto; text-align: left; }
     .tab-panel .cmd-prefix { color: var(--text-dim); user-select: none; }
 
+    /* ── Attribution callout ── */
+    .built-on {
+      display: flex; align-items: center; gap: 0.6rem;
+      background: rgba(99, 102, 241, 0.07);
+      border: 1px solid rgba(99, 102, 241, 0.22);
+      border-radius: 8px; padding: 0.65rem 1.1rem;
+      font-size: 0.875rem; color: var(--text-dim);
+      max-width: 480px; margin-bottom: 2rem; line-height: 1.4;
+    }
+    .built-on svg { width: 18px; height: 18px; fill: var(--indigo); flex-shrink: 0; }
+    .built-on a { color: var(--indigo-hi); text-decoration: none; font-weight: 600; }
+    .built-on a:hover { text-decoration: underline; }
+
     /* ── Features ── */
     .features { background: var(--bg-alt); }
     .features-grid {
@@ -302,13 +315,19 @@
   <!-- Hero -->
   <section class="snap-section hero">
     <span class="hero-eyebrow">bentopdf.sh</span>
-    <h1 class="hero-title">Documents to PDF.<br>Locally.</h1>
-    <p class="hero-tagline">WASM-powered conversion — no uploads, no cloud, no dependencies.</p>
+    <h1 class="hero-title">The PDF toolkit<br>for your terminal.</h1>
+    <p class="hero-tagline">Convert, merge, split, edit, sign — 100+ operations powered by BentoPDF's WASM engines. No browser, no cloud, no native installs.</p>
+
+    <div class="built-on">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm-1 7V3.5L18.5 9H13z"/></svg>
+      <span>Built on <a href="https://github.com/alam00000/bentopdf" target="_blank" rel="noopener noreferrer">BentoPDF</a> by <a href="https://github.com/alam00000" target="_blank" rel="noopener noreferrer">@alam00000</a> — they built the WASM engines, we built the CLI.</span>
+    </div>
 
     <div class="install-tabs">
       <div class="tab-buttons">
         <button class="tab-btn active" data-tab="npx">npx</button>
         <button class="tab-btn" data-tab="npm">npm</button>
+        <button class="tab-btn" data-tab="claude">claude code</button>
       </div>
       <div class="tab-panels">
         <div class="tab-panel active" id="tab-npx">
@@ -317,6 +336,10 @@
         <div class="tab-panel" id="tab-npm">
           <pre><span class="cmd-prefix">$ </span>npm install -g bentopdf-sh
 <span class="cmd-prefix">$ </span>bentopdf to-pdf report.docx</pre>
+        </div>
+        <div class="tab-panel" id="tab-claude">
+          <pre><span class="cmd-prefix">$ </span>npx skills add lokkju/bentopdf-sh -a claude-code
+<span class="cmd-prefix">  </span># then just ask Claude to convert your files</pre>
         </div>
       </div>
     </div>
@@ -412,7 +435,7 @@
         <div class="step-number">1</div>
         <div>
           <p class="step-title">Install</p>
-          <p class="step-desc">Install globally via npm. Requires Node.js 18+. WASM engines are downloaded on first use and cached in <code>~/.cache/bentopdf/</code>.</p>
+          <p class="step-desc">Install globally via npm. Requires Node.js 20+. WASM engines are downloaded on first use and cached in <code>~/.cache/bentopdf/</code>.</p>
           <pre class="step-code"><span class="cmd-prefix">$ </span>npm install -g bentopdf-sh</pre>
         </div>
       </div>
@@ -452,7 +475,7 @@
       <a href="https://www.npmjs.com/package/bentopdf-sh" target="_blank" rel="noopener noreferrer">npm</a>
     </nav>
     <p class="footer-copy">
-      Powered by <a href="https://bentopdf.com" target="_blank" rel="noopener noreferrer">BentoPDF</a>
+      A CLI wrapper for the <a href="https://github.com/alam00000/bentopdf" target="_blank" rel="noopener noreferrer">BentoPDF</a> WASM toolkit
       &nbsp;&middot;&nbsp;
       <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener noreferrer">AGPL-3.0</a>
       &nbsp;&middot;&nbsp;
