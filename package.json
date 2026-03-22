@@ -4,7 +4,7 @@
   "description": "Convert documents to PDF using WASM engines — no native dependencies",
   "type": "module",
   "bin": {
-    "bentopdf": "./bin/bentopdf.js"
+    "bentopdf": "bin/bentopdf.js"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -22,7 +22,14 @@
     "cli"
   ],
   "license": "AGPL-3.0-or-later",
-  "files": ["bin/", "src/", "engines.json", "LICENSE.md", ".claude-plugin/", "skills/"],
+  "files": [
+    "bin/",
+    "src/",
+    "engines.json",
+    "LICENSE.md",
+    ".claude-plugin/",
+    "skills/"
+  ],
   "devDependencies": {
     "vitest": "^4.1.0"
   },
