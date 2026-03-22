@@ -5,9 +5,11 @@ description: Install bentopdf-sh and convert your first document to PDF.
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 
+bentopdf-sh is a CLI wrapper for [BentoPDF](https://github.com/alam00000/bentopdf)'s WASM engines. All conversion work is done by BentoPDF's LibreOffice WASM, MuPDF, and pandoc-wasm engines — bentopdf-sh packages them as a command-line tool.
+
 ## Prerequisites
 
-- **Node.js 18+** — check with `node --version`
+- **Node.js 20+** — check with `node --version`
 - npm 9+ (comes with Node.js)
 
 WASM engines are downloaded on first use and cached at `~/.cache/bentopdf/`. An internet connection is required the first time each engine is used; after that it works fully offline.
@@ -15,17 +17,23 @@ WASM engines are downloaded on first use and cached at `~/.cache/bentopdf/`. An 
 ## Installation
 
 <Tabs>
-  <TabItem label="npm (global)">
-    ```bash
-    npm install -g bentopdf-sh
-    ```
-    This makes the `bentopdf` command available globally.
-  </TabItem>
   <TabItem label="npx (one-shot)">
     ```bash
     npx bentopdf-sh to-pdf report.docx
     ```
     No installation required. Slower on first run while npm fetches the package.
+  </TabItem>
+  <TabItem label="npm (global)">
+    ```bash
+    npm install -g bentopdf-sh
+    ```
+    Makes the `bentopdf` command available globally. Faster for repeated use.
+  </TabItem>
+  <TabItem label="Claude Code">
+    ```bash
+    npx skills add lokkju/bentopdf-sh -a claude-code
+    ```
+    Installs the bentopdf skill into Claude Code. Then just ask Claude to convert your files — see [Claude Code](/docs/claude-code/) for details.
   </TabItem>
 </Tabs>
 
