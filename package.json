@@ -1,13 +1,13 @@
 {
   "name": "bentopdf-sh",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Convert documents to PDF using WASM engines — no native dependencies",
   "type": "module",
   "bin": {
     "bentopdf": "bin/bentopdf.js"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.0.0"
   },
   "scripts": {
     "test": "vitest run",
