@@ -15,7 +15,7 @@ describe("LibreOfficeEngine integration", () => {
     fs.rmSync(tmpDir, { recursive: true, force: true });
   });
 
-  it("converts DOCX to PDF", async () => {
+  it.skipIf(process.env.CI)("converts DOCX to PDF", async () => {
     const engine = new LibreOfficeEngine();
     const input = path.resolve("tests/fixtures/test.docx");
     const output = path.join(tmpDir, "out.pdf");

@@ -3,6 +3,10 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import * as os from "node:os";
 import { execFileSync } from "node:child_process";
+import { createRequire } from "node:module";
+
+const require = createRequire(import.meta.url);
+const { version } = require("../package.json");
 
 const CLI = path.resolve("bin/bentopdf.js");
 
@@ -25,7 +29,7 @@ describe("E2E: bentopdf CLI", () => {
 
   it("shows version", () => {
     const output = execFileSync("node", [CLI, "--version"], { encoding: "utf-8" });
-    expect(output.trim()).toBe("0.1.0");
+    expect(output.trim()).toBe(version);
   });
 
   it("converts markdown to PDF", () => {
