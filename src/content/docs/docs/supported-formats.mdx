@@ -38,6 +38,21 @@ Handles images and acts as the PDF renderer in the pandoc pipeline via the `mupd
 ### pandoc-wasm
 Converts Markdown and HTML to an intermediate HTML representation, then passes it to MuPDF for PDF rendering. Handles tables, code blocks, and most CommonMark extensions.
 
+Also used directly for `to-docx` and `to-pptx` conversions (see below).
+
+## Beyond PDF — DOCX and PPTX output
+
+In addition to PDF conversion, bentopdf can convert Markdown and HTML to DOCX and PPTX using pandoc-wasm directly. This goes beyond what BentoPDF offers in the browser.
+
+| Input | Output | Command | Template support |
+|-------|--------|---------|------------------|
+| `.md` / `.markdown` | `.docx` | `to-docx` | `--template` for reference doc |
+| `.html` / `.htm` | `.docx` | `to-docx` | `--template` for reference doc |
+| `.md` / `.markdown` | `.pptx` | `to-pptx` | `--template` for reference doc |
+| `.html` / `.htm` | `.pptx` | `to-pptx` | `--template` for reference doc |
+
+The `--template` flag accepts a reference document (.docx or .pptx) that controls fonts, heading styles, page/slide layout, and other formatting. This works like pandoc's `--reference-doc` option.
+
 ## Unsupported formats
 
 If you pass a file with an unrecognised extension, bentopdf exits with code `1` and prints:

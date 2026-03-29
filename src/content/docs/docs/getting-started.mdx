@@ -69,6 +69,18 @@ Write to a directory (multiple inputs):
 bentopdf to-pdf *.docx --output ./pdfs/
 ```
 
+## Convert Markdown to DOCX or PPTX
+
+bentopdf can also convert Markdown and HTML to Word or PowerPoint — a feature that goes beyond what BentoPDF offers in the browser.
+
+```bash
+bentopdf to-docx notes.md                        # outputs notes.docx
+bentopdf to-pptx slides.md                       # outputs slides.pptx
+bentopdf to-docx notes.md -t brand-template.docx # apply a reference doc
+```
+
+Use `--template` (`-t`) to apply a reference document for branded output. See [CLI Reference](/docs/cli-reference/) for details.
+
 ## Next steps
 
 - [CLI Reference](/docs/cli-reference/) — all flags and subcommands

@@ -65,6 +65,82 @@ bentopdf to-pdf large-doc.docx --verbose
 
 ---
 
+## `bentopdf to-docx`
+
+Convert Markdown or HTML files to DOCX (Word) via pandoc-wasm.
+
+```bash
+bentopdf to-docx <input...> [options]
+```
+
+### Arguments
+
+| Argument | Description |
+|----------|-------------|
+| `<input...>` | One or more Markdown or HTML files. |
+
+### Options
+
+| Flag | Alias | Type | Default | Description |
+|------|-------|------|---------|-------------|
+| `--output` | `-o` | string | — | Output file path (single input) or directory path (multiple inputs). Defaults to same directory as input, same filename with `.docx` extension. |
+| `--template` | `-t` | string | — | Path to a reference document (.docx) for styling. Controls fonts, heading styles, page layout, and other formatting. Works like pandoc's `--reference-doc`. |
+| `--verbose` | — | boolean | `false` | Show detailed progress output. |
+
+### Examples
+
+```bash
+# Basic conversion
+bentopdf to-docx notes.md
+
+# With a branded template
+bentopdf to-docx report.md -t company-template.docx -o report.docx
+
+# Batch convert
+bentopdf to-docx *.md -o ./docs/
+```
+
+---
+
+## `bentopdf to-pptx`
+
+Convert Markdown or HTML files to PPTX (PowerPoint) via pandoc-wasm.
+
+```bash
+bentopdf to-pptx <input...> [options]
+```
+
+Pandoc splits slides on level-2 headings (`##`). Each `##` heading becomes a new slide title.
+
+### Arguments
+
+| Argument | Description |
+|----------|-------------|
+| `<input...>` | One or more Markdown or HTML files. |
+
+### Options
+
+| Flag | Alias | Type | Default | Description |
+|------|-------|------|---------|-------------|
+| `--output` | `-o` | string | — | Output file path (single input) or directory path (multiple inputs). Defaults to same directory as input, same filename with `.pptx` extension. |
+| `--template` | `-t` | string | — | Path to a reference document (.pptx) for styling. Controls slide masters, fonts, colors, and layout. Works like pandoc's `--reference-doc`. |
+| `--verbose` | — | boolean | `false` | Show detailed progress output. |
+
+### Examples
+
+```bash
+# Basic conversion
+bentopdf to-pptx slides.md
+
+# With a corporate slide template
+bentopdf to-pptx pitch.md -t brand.pptx -o pitch-deck.pptx
+
+# Batch convert
+bentopdf to-pptx *.md -o ./presentations/
+```
+
+---
+
 ## `bentopdf cache`
 
 Manage the WASM engine cache.
