@@ -26,4 +26,31 @@ describe("CLI argument parsing", () => {
     const parsed = await cli.parseAsync(["to-pdf", "doc.docx", "--verbose"]);
     expect(parsed.verbose).toBe(true);
   });
+
+  it("parses to-docx with single input", async () => {
+    const cli = buildCli();
+    const parsed = await cli.parseAsync(["to-docx", "notes.md"]);
+    expect(parsed._[0]).toBe("to-docx");
+    expect(parsed.input).toEqual(["notes.md"]);
+  });
+
+  it("parses to-docx with template option", async () => {
+    const cli = buildCli();
+    const parsed = await cli.parseAsync(["to-docx", "notes.md", "-t", "template.docx"]);
+    expect(parsed.template).toBe("template.docx");
+  });
+
+  it("parses to-pptx with single input", async () => {
+    const cli = buildCli();
+    const parsed = await cli.parseAsync(["to-pptx", "slides.md"]);
+    expect(parsed._[0]).toBe("to-pptx");
+    expect(parsed.input).toEqual(["slides.md"]);
+  });
+
+  it("parses to-pptx with output and template", async () => {
+    const cli = buildCli();
+    const parsed = await cli.parseAsync(["to-pptx", "slides.md", "-o", "out.pptx", "-t", "brand.pptx"]);
+    expect(parsed.output).toBe("out.pptx");
+    expect(parsed.template).toBe("brand.pptx");
+  });
 });
