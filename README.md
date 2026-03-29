@@ -19,7 +19,7 @@ npm install -g bentopdf-sh
 bentopdf to-pdf document.docx
 ```
 
-Requires Node.js 18+.
+Requires Node.js 20+.
 
 ### Claude Code / AI Agent Integration
 
@@ -47,6 +47,17 @@ bentopdf to-pdf slides.pptx -o presentation.pdf # explicit output
 bentopdf to-pdf *.docx -o ./pdfs/               # batch convert
 ```
 
+### Convert Markdown to DOCX or PPTX
+
+```bash
+bentopdf to-docx notes.md                          # outputs notes.docx
+bentopdf to-pptx slides.md -o presentation.pptx    # explicit output
+bentopdf to-docx notes.md -t brand-template.docx   # apply a reference doc
+bentopdf to-pptx slides.md -t corporate.pptx       # branded slide deck
+```
+
+Use `--template` (`-t`) to apply a reference document — this controls fonts, heading styles, page layout, and other formatting. Works like pandoc's `--reference-doc`.
+
 ### Supported formats
 
 | Format | Extensions | Engine |
@@ -60,12 +71,20 @@ bentopdf to-pdf *.docx -o ./pdfs/               # batch convert
 | HTML | .html, .htm | Pandoc + MuPDF |
 | Images | .jpg, .png, .svg, .tiff, .webp | MuPDF |
 
-### Options
+### Options (to-pdf)
 
 ```
 -o, --output <path>   Output file or directory
 --engine <name>       Force engine: mupdf, pandoc, or libreoffice
 --verbose             Show detailed progress
+```
+
+### Options (to-docx / to-pptx)
+
+```
+-o, --output <path>     Output file or directory
+-t, --template <path>   Reference document for styling
+--verbose               Show detailed progress
 ```
 
 ### Cache management
@@ -86,6 +105,18 @@ bentopdf-sh wraps three WASM engines as npm packages, running them in Node.js in
 - **[LibreOffice](https://www.libreoffice.org/)** (via `@matbee/libreoffice-converter`) — Office documents to PDF
 
 The format registry automatically picks the right engine based on file extension. No configuration needed.
+
+## Beyond BentoPDF
+
+Some features in bentopdf-sh go beyond what BentoPDF offers in the browser, by leveraging pandoc-wasm's full capabilities:
+
+| Feature | Command | Description |
+|---------|---------|-------------|
+| Markdown → DOCX | `to-docx` | Convert Markdown/HTML to Word documents via pandoc-wasm |
+| Markdown → PPTX | `to-pptx` | Convert Markdown/HTML to PowerPoint presentations via pandoc-wasm |
+| Template support | `--template` | Apply a reference document (.docx/.pptx) for branded output — controls fonts, styles, and layout |
+
+These work because pandoc-wasm exposes the full pandoc-server API, which supports output formats and reference documents that BentoPDF's browser interface doesn't expose.
 
 ## Feature Parity Roadmap
 
