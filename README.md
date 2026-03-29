@@ -118,6 +118,9 @@ Some features in bentopdf-sh go beyond what BentoPDF offers in the browser, by l
 
 These work because pandoc-wasm exposes the full pandoc-server API, which supports output formats and reference documents that BentoPDF's browser interface doesn't expose.
 
+**Planned:**
+- [ ] `inspect` command — preview how pandoc will interpret your Markdown before converting (slide boundaries for PPTX, heading structure for DOCX, template style compatibility)
+
 ## Feature Parity Roadmap
 
 BentoPDF provides 100+ tools across six categories (as of 2026-03-17). Here's what bentopdf-sh supports today and what's planned. Vote on or open [issues](https://github.com/lokkju/bentopdf-sh/issues) to help guide development priorities.
