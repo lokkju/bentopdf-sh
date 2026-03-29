@@ -63,4 +63,69 @@ export class PandocEngine extends Engine {
     const htmlData = new TextEncoder().encode(htmlContent);
     await this._mupdf.convertBuffer(htmlData, "text/html", outputPath);
   }
+
+  /**
+   * Convert Markdown/HTML to DOCX or PPTX via pandoc-wasm.
+   * @param {string} inputPath - Input file path (.md, .html, etc.)
+   * @param {string} outputPath - Output file path (.docx or .pptx)
+   * @param {object} options
+   * @param {string} options.toFormat - "docx" or "pptx"
+   * @param {string} [options.template] - Path to a reference document for styling
+   */
+  async convertTo(inputPath, outputPath, options = {}) {
+    if (this._loaded) {
+      // Only need pandoc for this path, not MuPDF
+    } else {
+      this._pandoc = await import("pandoc-wasm");
+      this._loaded = true;
+    }
+
+    const ext = path.extname(inputPath).slice(1).toLowerCase();
+    const fromFormat = PANDOC_FORMAT_MAP[ext];
+    if (!fromFormat) {
+      throw new Error(`Pandoc: unsupported input format .${ext}`);
+    }
+
+    const toFormat = options.toFormat;
+    if (!toFormat || !["docx", "pptx"].includes(toFormat)) {
+      throw new Error(`Pandoc: unsupported output format "${toFormat}"`);
+    }
+
+    const inputText = fs.readFileSync(inputPath, "utf-8");
+    const outputFilename = `output.${toFormat}`;
+
+    const pandocOpts = {
+      from: fromFormat,
+      to: toFormat,
+      standalone: true,
+      "output-file": outputFilename,
+    };
+
+    const files = {};
+
+    if (options.template) {
+      const templatePath = path.resolve(options.template);
+      if (!fs.existsSync(templatePath)) {
+        throw new Error(`Template not found: ${templatePath}`);
+      }
+      const templateData = fs.readFileSync(templatePath);
+      const templateFilename = path.basename(templatePath);
+      pandocOpts["reference-doc"] = templateFilename;
+      files[templateFilename] = new Blob([templateData]);
+    }
+
+    const result = await this._pandoc.convert(pandocOpts, inputText, files);
+
+    if (result.stderr) {
+      console.error(`Pandoc warnings: ${result.stderr}`);
+    }
+
+    const outputBlob = result.files[outputFilename];
+    if (!outputBlob) {
+      throw new Error(`Pandoc: no output file produced`);
+    }
+
+    const arrayBuffer = await outputBlob.arrayBuffer();
+    fs.writeFileSync(outputPath, Buffer.from(arrayBuffer));
+  }
 }
